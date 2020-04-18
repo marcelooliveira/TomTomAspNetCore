@@ -23,6 +23,16 @@ namespace TomTomWeb.Controllers
             return View();
         }
 
+        public IActionResult HeatMap()
+        {
+            return View();
+        }
+
+        public IActionResult Polygon()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

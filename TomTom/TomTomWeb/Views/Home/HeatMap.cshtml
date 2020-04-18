@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Heat Map";
+}
+
+<div id='map' class='map'></div>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
+<script>
+    const map = tt.map({
+        key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+        container: 'map',
+        zoom: 3,
+        center: [-98.5795, 39.8283]
+    });
+
+    fetch('https://www1.ncdc.noaa.gov/pub/data/nidis/geojson/us/usdm/USDM_current.geojson')
+        .then(res => res.json())
+        .then(data => {
+            map.addLayer({
+                id: 'density',
+                source: {
+                    type: 'geojson',
+                    data,
+                },
+                type: 'heatmap',
+                paint: {
+                    //Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        0, 2,
+                        3, 5,
+                    ],
+                    'heatmap-weight': {
+                        type: 'exponential',
+                        property: 'density',
+                        stops: [
+                            [1, 0],
+                            [10000, 1],
+                        ]
+                    }
+                }
+            });
+        })
+        .catch(err => {
+            debugger;
+            console.error(err);
+        });
+</script>

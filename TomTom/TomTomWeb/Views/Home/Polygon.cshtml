@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Polygon";
+}
+
+<div id='map' class='map'></div>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
+<script>
+    const map = tt.map({
+        key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+        container: 'map',
+        zoom: 12,
+        center: [-73.9712, 40.7831], //Central Park, Manhattan, NY
+        //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
+        style: 'tomtom://vector/1/basic-main',
+    });
+
+    var config = {
+        key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+        refresh: 3000
+    };
+    map.on('load', function () {
+        map.addTier(new tt.TrafficFlowTilesTier(config)).then(function () {
+            map.addLayer({
+                'id': 'overlay',
+                'type': 'fill',
+                'source': {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Polygon',
+                            'coordinates': [[
+                                [-73.9582, 40.8007], //Frederick Douglass Sculpture and Water Wall
+                                [-73.9491, 40.7968], //Duke Ellington Statue
+                                [-73.9730, 40.7642], //5 Av/W 59 St Bus stop
+                                [-73.9819, 40.7681], //Columbus Circle
+                                [-73.9582, 40.8007], //Frederick Douglass Sculpture and Water Wall
+                            ]]
+                        }
+                    }
+                },
+                'layout': {},
+                'paint': {
+                    'fill-color': '#db356c',
+                    'fill-opacity': 0.5,
+                    'fill-outline-color': 'black'
+                }
+            }, 'Vector Traffic Outline One Side Parking road');
+        });
+    });
+</script>
