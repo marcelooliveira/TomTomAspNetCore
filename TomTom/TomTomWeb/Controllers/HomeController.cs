@@ -34,7 +34,7 @@ namespace TomTomWeb.Controllers
             return View();
         }
 
-        public async Task<IActionResult> PolygonAsync()
+        public async Task<IActionResult> Places()
         {
             ViewData["MyTomTomKey"] = MyTomTomKey;
 
@@ -42,8 +42,8 @@ namespace TomTomWeb.Controllers
                             "wwwroot", "json", "famous-places.json");
 
             string json = await System.IO.File.ReadAllTextAsync(file);
-
-            return View("Polygon", json);
+            var placeCollection = PlaceCollection.FromJson(json);
+            return View("Places", placeCollection);
         }
 
         public IActionResult Privacy()

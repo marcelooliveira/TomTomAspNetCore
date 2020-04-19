@@ -1,10 +1,10 @@
-﻿@model String; 
+﻿@model PlaceCollection; 
 @{
     ViewData["Title"] = "Polygon";
 }
 
 <input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
-<input id="famousPlaces" type="hidden" value="@Model" />
+<input id="famousPlaces" type="hidden" value="@Model.ToJson()" />
 
 <div id='map' class='map'></div>
 
@@ -12,7 +12,7 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
         let myTomTomKey = $('#myTomTomKey').val();
-        let famousPlaces = JSON.parse($('#famousPlaces').val());
+        let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
         let place = famousPlaces[3];
 
         const map = tt.map({
