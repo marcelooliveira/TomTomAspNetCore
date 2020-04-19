@@ -2,13 +2,17 @@
     ViewData["Title"] = "World Map";
 }
 
+<input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
+
 <div id='map' class='map'></div>
 
 @section Scripts {
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
+        let myTomTomKey = $('#myTomTomKey').val();
+
         const map = tt.map({
-            key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+            key: myTomTomKey,
             container: 'map'
         });
     </script>

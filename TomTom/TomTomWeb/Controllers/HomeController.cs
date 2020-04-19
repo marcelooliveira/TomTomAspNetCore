@@ -12,6 +12,7 @@ namespace TomTomWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private const string MyTomTomKey = "9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -20,16 +21,19 @@ namespace TomTomWeb.Controllers
 
         public IActionResult Index()
         {
+            ViewData["MyTomTomKey"] = MyTomTomKey;
             return View();
         }
 
         public IActionResult HeatMap()
         {
+            ViewData["MyTomTomKey"] = MyTomTomKey;
             return View();
         }
 
         public IActionResult Polygon()
         {
+            ViewData["MyTomTomKey"] = MyTomTomKey;
             return View();
         }
 

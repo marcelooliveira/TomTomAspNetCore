@@ -2,13 +2,17 @@
     ViewData["Title"] = "Polygon";
 }
 
+<input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
+
 <div id='map' class='map'></div>
 
 @section Scripts {
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
+        let myTomTomKey = $('#myTomTomKey').val();
+
         const map = tt.map({
-            key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+            key: myTomTomKey,
             container: 'map',
             zoom: 12,
             center: [-73.9712, 40.7831], //Central Park, Manhattan, NY
@@ -17,7 +21,7 @@
         });
 
         var config = {
-            key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+            key: myTomTomKey,
             refresh: 3000
         };
         map.on('load', function () {
