@@ -4,10 +4,12 @@
 
 <div id='map' class='map'></div>
 
-<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
-<script>
-    const map = tt.map({
-        key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
-        container: 'map'
-    });
-</script>
+@section Scripts {
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
+    <script>
+        const map = tt.map({
+            key: '9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3',
+            container: 'map'
+        });
+    </script>
+}
