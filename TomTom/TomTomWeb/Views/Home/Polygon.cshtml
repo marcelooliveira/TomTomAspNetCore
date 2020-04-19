@@ -1,8 +1,10 @@
-﻿@{
+﻿@model String; 
+@{
     ViewData["Title"] = "Polygon";
 }
 
 <input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
+<input id="famousPlaces" type="hidden" value="@Model" />
 
 <div id='map' class='map'></div>
 
@@ -10,12 +12,13 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
         let myTomTomKey = $('#myTomTomKey').val();
+        let famousPlaces = JSON.parse($('#famousPlaces').val());
 
         const map = tt.map({
             key: myTomTomKey,
             container: 'map',
             zoom: 12,
-            center: [-73.9712, 40.7831], //Central Park, Manhattan, NY
+            center: famousPlaces[0].center,
             //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
             style: 'tomtom://vector/1/basic-main',
         });
@@ -35,13 +38,7 @@
                             'type': 'Feature',
                             'geometry': {
                                 'type': 'Polygon',
-                                'coordinates': [[
-                                    [-73.9582, 40.8007], //Frederick Douglass Sculpture and Water Wall
-                                    [-73.9491, 40.7968], //Duke Ellington Statue
-                                    [-73.9730, 40.7642], //5 Av/W 59 St Bus stop
-                                    [-73.9819, 40.7681], //Columbus Circle
-                                    [-73.9582, 40.8007], //Frederick Douglass Sculpture and Water Wall
-                                ]]
+                                'coordinates': famousPlaces[0].coordinates
                             }
                         }
                     },

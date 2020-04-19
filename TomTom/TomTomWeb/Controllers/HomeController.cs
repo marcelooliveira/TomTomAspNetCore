@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -33,10 +34,16 @@ namespace TomTomWeb.Controllers
             return View();
         }
 
-        public IActionResult Polygon()
+        public async Task<IActionResult> PolygonAsync()
         {
             ViewData["MyTomTomKey"] = MyTomTomKey;
-            return View();
+
+            var file = Path.Combine(Directory.GetCurrentDirectory(),
+                            "wwwroot", "json", "famous-places.json");
+
+            string json = await System.IO.File.ReadAllTextAsync(file);
+
+            return View("Polygon", json);
         }
 
         public IActionResult Privacy()
