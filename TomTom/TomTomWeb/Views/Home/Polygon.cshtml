@@ -13,12 +13,13 @@
     <script>
         let myTomTomKey = $('#myTomTomKey').val();
         let famousPlaces = JSON.parse($('#famousPlaces').val());
+        let place = famousPlaces[1];
 
         const map = tt.map({
             key: myTomTomKey,
             container: 'map',
-            zoom: 12,
-            center: famousPlaces[0].center,
+            zoom: place.zoom,
+            center: place.center,
             //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
             style: 'tomtom://vector/1/basic-main',
         });
@@ -28,27 +29,25 @@
             refresh: 3000
         };
         map.on('load', function () {
-            map.addTier(new tt.TrafficFlowTilesTier(config)).then(function () {
-                map.addLayer({
-                    'id': 'overlay',
-                    'type': 'fill',
-                    'source': {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Polygon',
-                                'coordinates': famousPlaces[0].coordinates
-                            }
+            map.addLayer({
+                'id': 'overlay',
+                'type': 'fill',
+                'source': {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Polygon',
+                            'coordinates': place.coordinates
                         }
-                    },
-                    'layout': {},
-                    'paint': {
-                        'fill-color': '#db356c',
-                        'fill-opacity': 0.5,
-                        'fill-outline-color': 'black'
                     }
-                }, 'Vector Traffic Outline One Side Parking road');
+                },
+                'layout': {},
+                'paint': {
+                    'fill-color': '#db356c',
+                    'fill-opacity': 0.5,
+                    'fill-outline-color': 'black'
+                }
             });
         });
     </script>
