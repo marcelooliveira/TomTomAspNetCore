@@ -3,6 +3,7 @@
 }
 
 <input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
+<input id="famousPlaces" type="hidden" value="@Model.ToJson()" />
 
 <div id='map' class='map'></div>
 
@@ -10,10 +11,44 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
         let myTomTomKey = $('#myTomTomKey').val();
+        let droughtInfoURL = $('#droughtInfoURL').val();
+        let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
+        let place = famousPlaces[3];
 
         const map = tt.map({
             key: myTomTomKey,
-            container: 'map'
+            container: 'map',
+            zoom: place.zoom,
+            center: place.center,
+            //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
+            style: 'tomtom://vector/1/basic-main',
+        });
+
+        var config = {
+            key: myTomTomKey,
+            refresh: 3000
+        };
+        map.on('load', function () {
+            map.addLayer({
+                'id': 'overlay',
+                'type': 'fill',
+                'source': {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Polygon',
+                            'coordinates': place.coordinates
+                        }
+                    }
+                },
+                'layout': {},
+                'paint': {
+                    'fill-color': '#db356c',
+                    'fill-opacity': 0.5,
+                    'fill-outline-color': 'black'
+                }
+            });
         });
     </script>
 }

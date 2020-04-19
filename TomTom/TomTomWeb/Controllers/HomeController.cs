@@ -14,27 +14,13 @@ namespace TomTomWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private const string MyTomTomKey = "9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3";
-        private const string DroughtInfoURL = "https://www1.ncdc.noaa.gov/pub/data/nidis/geojson/us/usdm/USDM_current.geojson";
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            ViewData["MyTomTomKey"] = MyTomTomKey;
-            return View();
-        }
-
-        public IActionResult HeatMap()
-        {
-            ViewData["MyTomTomKey"] = MyTomTomKey;
-            ViewData["DroughtInfoURL"] = DroughtInfoURL;
-            return View();
-        }
-
-        public async Task<IActionResult> Places()
+        public async Task<IActionResult> Index()
         {
             ViewData["MyTomTomKey"] = MyTomTomKey;
 
@@ -43,7 +29,7 @@ namespace TomTomWeb.Controllers
 
             string json = await System.IO.File.ReadAllTextAsync(file);
             var placeCollection = PlaceCollection.FromJson(json);
-            return View("Places", placeCollection);
+            return View("Index", placeCollection);
         }
 
         public IActionResult Privacy()
