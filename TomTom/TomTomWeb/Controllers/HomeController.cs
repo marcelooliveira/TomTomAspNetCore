@@ -13,6 +13,7 @@ namespace TomTomWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private const string MyTomTomKey = "9TMyfYUw9qr63VLXIhLeAGdjhNBjLQu3";
+        private const string DroughtInfoURL = "https://www1.ncdc.noaa.gov/pub/data/nidis/geojson/us/usdm/USDM_current.geojson";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -28,6 +29,7 @@ namespace TomTomWeb.Controllers
         public IActionResult HeatMap()
         {
             ViewData["MyTomTomKey"] = MyTomTomKey;
+            ViewData["DroughtInfoURL"] = DroughtInfoURL;
             return View();
         }
 

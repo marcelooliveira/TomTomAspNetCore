@@ -3,6 +3,7 @@
 }
 
 <input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
+<input id="droughtInfoURL" type="hidden" value="@ViewData["DroughtInfoURL"]" />
 
 <div id='map' class='map'></div>
 
@@ -10,6 +11,7 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
         let myTomTomKey = $('#myTomTomKey').val();
+        let droughtInfoURL = $('#droughtInfoURL').val();
 
         const map = tt.map({
             key: myTomTomKey,
@@ -18,7 +20,7 @@
             center: [-98.5795, 39.8283]
         });
 
-        fetch('https://www1.ncdc.noaa.gov/pub/data/nidis/geojson/us/usdm/USDM_current.geojson')
+        fetch(droughtInfoURL)
             .then(res => res.json())
             .then(data => {
                 map.addLayer({
