@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,12 +26,13 @@ namespace TomTomWeb.Controllers
         {
             ViewData["MyTomTomKey"] = MyTomTomKey;
 
-            var file = Path.Combine(Directory.GetCurrentDirectory(),
-                            "wwwroot", "json", "famous-places.json");
-
-            string json = await System.IO.File.ReadAllTextAsync(file);
-            var placeCollection = PlaceCollection.FromJson(json);
-            return View("Index", placeCollection);
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync("http://localhost:5001/places");
+                var json = await response.Content.ReadAsStringAsync();
+                var placeCollection = PlaceCollection.FromJson(json);
+                return View("Index", placeCollection);
+            }
         }
 
         public IActionResult Privacy()

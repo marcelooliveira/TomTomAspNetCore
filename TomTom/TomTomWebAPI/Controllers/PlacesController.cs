@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TomTomLib;
 
 namespace TomTomWebAPI.Controllers
 {
@@ -24,16 +26,25 @@ namespace TomTomWebAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<PlaceCollection> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return await GetPlaceCollection();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Place> Get(int id)
+        {
+            var collection = await GetPlaceCollection();
+            return collection.Places.Where(p => p.Id == id).Single();
+        }
+
+        private async Task<PlaceCollection> GetPlaceCollection()
+        {
+            var file = Path.Combine(Directory.GetCurrentDirectory(),
+                "Data", "famous-places.json");
+
+            string json = await System.IO.File.ReadAllTextAsync(file);
+            return PlaceCollection.FromJson(json);
         }
     }
 }
