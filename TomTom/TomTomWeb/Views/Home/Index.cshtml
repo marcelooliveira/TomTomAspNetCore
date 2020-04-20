@@ -1,9 +1,18 @@
-﻿@{
+﻿@model PlaceCollection
+@{
     ViewData["Title"] = "World Map";
 }
 
 <input id="myTomTomKey" type="hidden" value="@ViewData["MyTomTomKey"]" />
 <input id="famousPlaces" type="hidden" value="@Model.ToJson()" />
+
+<div id="places-container">
+    @for (int i = 0; i < Model.Places.Length; i++)
+    {
+        var place = Model.Places[i]; 
+        <a class="btn btn-primary" href="#" role="button" onclick="javascript: showPlace(@i);">@place.Name</a>
+    }
+</div>
 
 <div id='map' class='map'></div>
 
@@ -13,23 +22,31 @@
         let myTomTomKey = $('#myTomTomKey').val();
         let droughtInfoURL = $('#droughtInfoURL').val();
         let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
-        let place = famousPlaces[3];
-
-        const map = tt.map({
-            key: myTomTomKey,
-            container: 'map',
-            zoom: place.zoom,
-            center: place.center,
-            //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
-            style: 'tomtom://vector/1/basic-main',
-        });
+        let map;
 
         var config = {
             key: myTomTomKey,
             refresh: 3000
         };
-        map.on('load', function () {
-            map.addLayer({
+
+        function showPlace(i) {
+            var place = famousPlaces[i];
+
+            if (map) {
+                map.remove();
+            }
+
+            map = tt.map({
+                key: myTomTomKey,
+                container: 'map',
+                zoom: place.zoom,
+                center: place.center,
+                //valid styles include: basic-main, basic-light, basic-night, hybrid-main, hybrid-night, labels-main, and labels-night
+                style: 'tomtom://vector/1/basic-main',
+            });
+
+            map.on('load', function () {
+                map.addLayer({
                 'id': 'overlay',
                 'type': 'fill',
                 'source': {
@@ -49,6 +66,7 @@
                     'fill-outline-color': 'black'
                 }
             });
-        });
+            });
+        }
     </script>
 }
