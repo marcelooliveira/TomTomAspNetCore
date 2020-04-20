@@ -35,6 +35,17 @@ namespace TomTomWeb.Controllers
             }
         }
 
+        public async Task<JsonResult> GetPlace(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync($"http://localhost:5001/places/{id}");
+                var json = await response.Content.ReadAsStringAsync();
+                var place = Place.FromJson(json);
+                return new JsonResult(place);
+            }
+        }
+
         public IActionResult Privacy()
         {
             return View();

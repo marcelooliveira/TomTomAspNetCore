@@ -29,5 +29,10 @@ namespace TomTomLib
         [JsonProperty("coordinates")]
         public double[][][] Coordinates { get; set; }
 
+        public static Place FromJson(string json) =>
+            JsonConvert.DeserializeObject<Place>(json);
+
+        public string ToJson() =>
+            JsonConvert.SerializeObject(this);
     }
 }
