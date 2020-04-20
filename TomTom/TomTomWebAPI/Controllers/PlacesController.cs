@@ -9,16 +9,16 @@ namespace TomTomWebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class PlacesController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<PlacesController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public PlacesController(ILogger<PlacesController> logger)
         {
             _logger = logger;
         }

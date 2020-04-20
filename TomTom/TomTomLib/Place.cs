@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TomTomWeb.Models
+namespace TomTomLib
 {
     public class PlaceCollection
     {
