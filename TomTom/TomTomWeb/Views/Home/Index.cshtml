@@ -10,7 +10,7 @@
     @for (int i = 0; i < Model.Places.Length; i++)
     {
         var place = Model.Places[i]; 
-        <a class="btn btn-primary" href="#" role="button" onclick="javascript: showPlace(@i);">@place.Name</a>
+        <a class="btn btn-primary" href="#" role="button" onclick="javascript: btnClick(@place.Id);">@place.Name</a>
     }
 </div>
 
@@ -31,8 +31,14 @@
             refresh: 3000
         };
 
-        function showPlace(i) {
-            var place = famousPlaces[i];
+        function btnClick(id) {
+            $.ajax('http://localhost:5000/Home/GetPlace/' + id)
+                .done(function (place) {
+                    showPlace(place)
+                });
+        }
+
+        function showPlace(place) {
             $('#placeName').html(place.name);
 
             if (map) {
