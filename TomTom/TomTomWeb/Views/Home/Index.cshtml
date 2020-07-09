@@ -10,8 +10,8 @@
     <a class="btn btn-dark" href="#" role="button" onclick="javascript: showWorld();">Show World</a>
     @for (int i = 0; i < Model.Places.Length; i++)
     {
-        var place = Model.Places[i]; 
-        <a class="btn btn-primary" href="#" role="button" onclick="javascript: btnClick(@place.Id);">@place.Name</a>
+        var place = Model.Places[i];
+        <a class="btn btn-primary" href="#" role="button" onclick="javascript: showPlace(@place.Id);">@place.Name</a>
     }
 </div>
 
@@ -22,18 +22,13 @@
 @section Scripts {
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.38.0/maps/maps-web.min.js"></script>
     <script>
-        let myTomTomKey = $('#myTomTomKey').val();
-        let droughtInfoURL = $('#droughtInfoURL').val();
-        let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
         let map;
+        let myTomTomKey = $('#myTomTomKey').val();
+
+        let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
 
         initialize();
         showWorld();
-
-        var config = {
-            key: myTomTomKey,
-            refresh: 3000
-        };
 
         function initialize() {
             map = tt.map({
@@ -48,19 +43,14 @@
 
                     var marker = new tt.Marker().setLngLat(place.center).addTo(map);
                     var popupOffsets = {
-                        top: [0, 0],
-                        bottom: [0, -40],
-                        'bottom-right': [0, -70],
-                        'bottom-left': [0, -70],
-                        left: [25, -35],
-                        right: [-25, -35]
+                        bottom: [0, -40]
                     }
 
-                    var popup = new tt.Popup({ offset: popupOffsets }).setHTML('<a href="javascript:  btnClick(' + place.id + ');">' + place.name + '</a>');
+                    var popup = new tt.Popup({ offset: popupOffsets }).setHTML('<a href="javascript:  showPlace(' + place.id + ');">' + place.name + '</a>');
                     marker.setPopup(popup);
 
                     map.addLayer({
-                        'id': 'overlay' + i,
+                        'id': 'overlay' + place.id,
                         'type': 'fill',
                         'source': {
                             'type': 'geojson',
@@ -81,14 +71,6 @@
                     });
                 }
             });
-
-        }
-
-        function btnClick(id) {
-            $.ajax('http://localhost:5000/Home/GetPlace/' + id)
-                .done(function (place) {
-                    showPlace(place)
-                });
         }
 
         function showWorld() {
@@ -100,13 +82,16 @@
             });
         }
 
-        function showPlace(place) {
-            $('#placeName').html(place.name);
+        function showPlace(id) {
+            $.ajax('http://localhost:5000/Home/GetPlace/' + id)
+                .done(function (place) {
+                    $('#placeName').html(place.name);
 
-            map.jumpTo({
-                zoom: place.zoom,
-                center: place.center
-            });
+                    map.jumpTo({
+                        zoom: place.zoom,
+                        center: place.center
+                    });
+                });
         }
     </script>
 }
