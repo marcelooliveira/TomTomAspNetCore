@@ -13,6 +13,11 @@ namespace TomTomWebAPI.Controllers
     [Route("[controller]")]
     public class PlacesController : ControllerBase
     {
+        private static readonly string[] Summaries = new[]
+        {
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
+
         private readonly ILogger<PlacesController> _logger;
 
         public PlacesController(ILogger<PlacesController> logger)

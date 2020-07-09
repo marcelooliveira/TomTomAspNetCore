@@ -27,6 +27,7 @@
         let famousPlaces = JSON.parse($('#famousPlaces').val()).Places;
         let map;
 
+        initialize();
         showWorld();
 
         var config = {
@@ -34,33 +35,53 @@
             refresh: 3000
         };
 
-        function showWorld() {
-            $('#placeName').html('');
-
+        function initialize() {
             map = tt.map({
                 key: myTomTomKey,
                 container: 'map',
-                zoom: 1.5,
-                center: [0, 40],
                 style: 'tomtom://vector/1/basic-main'
             });
 
-            for (var i = 0; i < famousPlaces.length; i++) {
-                let place = famousPlaces[i];
+            map.on('load', function () {
+                for (var i = 0; i < famousPlaces.length; i++) {
+                    let place = famousPlaces[i];
 
-                var marker = new tt.Marker().setLngLat(place.center).addTo(map);
-                var popupOffsets = {
-                    top: [0, 0],
-                    bottom: [0, -40],
-                    'bottom-right': [0, -70],
-                    'bottom-left': [0, -70],
-                    left: [25, -35],
-                    right: [-25, -35]
+                    var marker = new tt.Marker().setLngLat(place.center).addTo(map);
+                    var popupOffsets = {
+                        top: [0, 0],
+                        bottom: [0, -40],
+                        'bottom-right': [0, -70],
+                        'bottom-left': [0, -70],
+                        left: [25, -35],
+                        right: [-25, -35]
+                    }
+
+                    var popup = new tt.Popup({ offset: popupOffsets }).setHTML('<a href="javascript:  btnClick(' + place.id + ');">' + place.name + '</a>');
+                    marker.setPopup(popup);
+
+                    map.addLayer({
+                        'id': 'overlay' + i,
+                        'type': 'fill',
+                        'source': {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Polygon',
+                                    'coordinates': place.coordinates
+                                }
+                            }
+                        },
+                        'layout': {},
+                        'paint': {
+                            'fill-color': '#db356c',
+                            'fill-opacity': 0.5,
+                            'fill-outline-color': 'black'
+                        }
+                    });
                 }
+            });
 
-                var popup = new tt.Popup({ offset: popupOffsets }).setHTML('<a href="javascript:  btnClick(' + place.id + ');">' + place.name + '</a>');
-                marker.setPopup(popup);
-            }
         }
 
         function btnClick(id) {
@@ -70,41 +91,21 @@
                 });
         }
 
+        function showWorld() {
+            $('#placeName').html('');
+
+            map.jumpTo({
+                zoom: 1.5,
+                center: [0, 40]
+            });
+        }
+
         function showPlace(place) {
             $('#placeName').html(place.name);
 
-            if (map) {
-                map.remove();
-            }
-
-            map = tt.map({
-                key: myTomTomKey,
-                container: 'map',
+            map.jumpTo({
                 zoom: place.zoom,
                 center: place.center
-            });
-
-            map.on('load', function () {
-                map.addLayer({
-                'id': 'overlay',
-                'type': 'fill',
-                'source': {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Polygon',
-                            'coordinates': place.coordinates
-                        }
-                    }
-                },
-                'layout': {},
-                'paint': {
-                    'fill-color': '#db356c',
-                    'fill-opacity': 0.5,
-                    'fill-outline-color': 'black'
-                }
-            });
             });
         }
     </script>
